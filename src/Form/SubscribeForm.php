@@ -20,6 +20,9 @@ class SubscribeForm extends FormBase
 
   public function buildForm(array $form, FormStateInterface $form_state)
   {
+    $form['#prefix'] = '<div id="sendpulse-subscribe-form-wrapper">';
+    $form['#suffix'] = '</div>';
+
     $form['description'] = [
       '#type' => 'item',
       '#markup' => $this->t('Subscribe our news.'),
@@ -50,6 +53,10 @@ class SubscribeForm extends FormBase
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Subscribe'),
+      '#ajax' => [
+        'wrapper' => 'sendpulse-subscribe-form-wrapper',
+        'callback' => '::ajaxCallback',
+      ],
     ];
 
     $form['#cache']['max-age'] = 0;
@@ -82,6 +89,11 @@ class SubscribeForm extends FormBase
     }
   }
 
+  public function ajaxCallback(array &$form, FormStateInterface $form_state)
+  {
+    return $form;
+  }
+
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
     $config = $this->config('sendpulse.adminsettings');
@@ -109,10 +121,13 @@ class SubscribeForm extends FormBase
 
     }
 
-    $messenger = Drupal::messenger();
-    $messenger->addMessage('Thank you for subscribe.');
+//    $messenger = Drupal::messenger();
+//    $messenger->addMessage('Thank you for subscribe.');
 
+    $form['success'] = [
+      '#markup' => t('Thank you for subscribe.'),
+    ];
     // Redirect to home
-    $form_state->setRedirect('<front>');
+    // $form_state->setRedirect('<front>');
   }
 }
