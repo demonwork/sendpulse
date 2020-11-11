@@ -1,0 +1,5 @@
+sendpulse_menu:
+  title: 'Sendpulse settings'
+  description: 'Configure global settings for Sendpulse.'
+  parent: system.admin_config_services
+  route_name: sendpulse.sendpulse_config_form

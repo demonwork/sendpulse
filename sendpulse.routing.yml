@@ -1,0 +1,17 @@
+#sendpulse.sendpulse_subscribe_form:
+#  path: '/sendpulse/subscribe'
+#  defaults:
+#    _form: 'Drupal\sendpulse\Form\SubscribeForm'
+#    _title: 'Sendpulse subscribe form.'
+#  requirements:
+#    _permission: 'access content'
+
+sendpulse.sendpulse_config_form:
+  path: '/admin/config/sendpulse/adminsettings'
+  defaults:
+    _form: '\Drupal\sendpulse\Form\ConfigForm'
+    _title: 'Config'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
