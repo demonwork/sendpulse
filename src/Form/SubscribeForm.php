@@ -34,6 +34,15 @@ class SubscribeForm extends FormBase
       '#suffix' => '</strong>',
     ];
 
+    $form['confirm'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Confirm process privacy data'),
+      '#description' => $this->t('I agree process my private data. <a href="https://www.ya.ru">Terms</a>'),
+      '#required' => TRUE,
+      '#prefix' => '<strong>',
+      '#suffix' => '</strong>',
+    ];
+
     $form['actions'] = [
       '#type' => 'actions',
     ];
@@ -55,6 +64,11 @@ class SubscribeForm extends FormBase
     $email = $form_state->getValue('email');
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $form_state->setErrorByName('email', $this->t('Wrong email address.'));
+    }
+
+    $confirm = $form_state->getValue('confirm');
+    if ($confirm != 1) {
+      $form_state->setErrorByName('confirm', $this->t('You must agree with terms.'));
     }
 
     if ($errors = $form_state->getErrors()) {
