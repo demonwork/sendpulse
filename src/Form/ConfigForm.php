@@ -63,6 +63,7 @@ class ConfigForm extends ConfigFormBase
     try {
       $sp_client = new ApiClient($api_id, $api_secret, new SendpulseTokenStorage('sendpulse.adminsettings'));
       $books = $sp_client->listAddressBooks();
+      // TODO: проверить $books сообщить админу о неполадках
       foreach ($books as $book) {
         $address_books[$book->id] = $book->name;
       }

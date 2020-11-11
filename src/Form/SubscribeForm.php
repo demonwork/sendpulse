@@ -77,7 +77,6 @@ class SubscribeForm extends FormBase
 
     $email = $form_state->getValue('email');
     $data = [
-      'emails' => [
         [
           'email' => $email,
           'variables' => [
@@ -85,14 +84,15 @@ class SubscribeForm extends FormBase
 //            'Phone' => '555-55-55',
           ],
         ],
-      ]
     ];
 
     try {
       $sp_client = new ApiClient($api_id, $api_secret, new SendpulseTokenStorage('sendpulse.adminsettings'));
-      $sp_client->addEmails($address_book, $data);
+      $r = $sp_client->addEmails($address_book, $data);
+      // TODO: проверить $r сообщить пользователю/админу о неполадках
     } catch (Exception $exception) {
       // TODO: сообщить админу о неполадках
+
     }
 
     $messenger = Drupal::messenger();
