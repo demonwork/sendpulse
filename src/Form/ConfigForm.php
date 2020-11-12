@@ -42,6 +42,29 @@ class ConfigForm extends ConfigFormBase
       '#default_value' => $api_secret,
     ];
 
+    $force_confirm = $config->get('sendpulse_force_confirm');
+    $form['sendpulse_force_confirm'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Force confirm subscribe'),
+      '#description' => $this->t('Force user to confirm subscribe by follow url from email.'),
+      '#default_value' => $force_confirm !== null ? $force_confirm : true,
+    ];
+
+    $form['sendpulse_confirm_email'] = [
+      '#type' => 'email',
+      '#title' => $this->t('Confirm email'),
+      '#description' => $this->t('Email will be set into "From" field of confirmation request mail.'),
+      '#default_value' => $config->get('sendpulse_confirm_email'),
+      '#states' => [
+        'visible' => [
+          ':input[name="sendpulse_force_confirm"]' => ['checked' => true],
+        ],
+        'required' => [
+          ':input[name="sendpulse_force_confirm"]' => ['checked' => true],
+        ],
+      ],
+    ];
+
     if (!empty($api_id) && !empty($api_secret)) {
       $options = $this->getAddressBookList($api_id, $api_secret);
       $form['sendpulse_address_book'] = [
@@ -84,6 +107,8 @@ class ConfigForm extends ConfigFormBase
       $config->set('sendpulse_api_secret', $secret);
     }
 
+    $config->set('sendpulse_force_confirm', $form_state->getValue('sendpulse_force_confirm'));
+    $config->set('sendpulse_confirm_email', $form_state->getValue('sendpulse_confirm_email'));
     $config->set('sendpulse_address_book', $form_state->getValue('sendpulse_address_book'));
     $config->save();
   }

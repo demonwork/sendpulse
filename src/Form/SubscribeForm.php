@@ -100,21 +100,28 @@ class SubscribeForm extends FormBase
     $api_id = $config->get('sendpulse_api_id');
     $api_secret = $config->get('sendpulse_api_secret');
     $address_book = $config->get('sendpulse_address_book');
+    $force_confirm = $config->get('sendpulse_force_confirm');
+    $confirm_email = $config->get('sendpulse_confirm_email');
 
     $email = $form_state->getValue('email');
     $data = [
-        [
-          'email' => $email,
-          'variables' => [
+      [
+        'email' => $email,
+        'variables' => [
 //            'Имя' => 'Дмитрий',
 //            'Phone' => '555-55-55',
-          ],
         ],
+      ],
     ];
 
     try {
       $sp_client = new ApiClient($api_id, $api_secret, new SendpulseTokenStorage('sendpulse.adminsettings'));
-      $r = $sp_client->addEmails($address_book, $data);
+      $add_params = [];
+      if ($force_confirm && !empty($confirm_email)) {
+        $add_params = ['confirmation' => 'force', 'sender_email' => $confirm_email];
+      }
+
+      $r = $sp_client->addEmails($address_book, $data, $add_params);
       // TODO: проверить $r сообщить пользователю/админу о неполадках
     } catch (Exception $exception) {
       // TODO: сообщить админу о неполадках
