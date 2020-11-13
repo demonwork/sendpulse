@@ -57,6 +57,12 @@ class SubscribeForm extends FormBase
         'wrapper' => 'sendpulse-subscribe-form-wrapper',
         'callback' => '::ajaxCallback',
       ],
+      '#states' => [
+        'enabled' => [
+          ':input[name="confirm"]' => ['checked' => true],
+        ],
+      ],
+
     ];
 
     $form['#cache']['max-age'] = 0;

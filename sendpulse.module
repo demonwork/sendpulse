@@ -1,1 +1,39 @@
 <?php
+
+use Drupal\locale\SourceString;
+use Drupal\locale\StringDatabaseStorage;
+
+function sendpulse_cache_flush()
+{
+  $string_to_translate = [
+    'Wrong email address.' => 'Не верный email адрес.',
+    'You must agree with terms.' => 'Вы должны согласится с условиями.',
+    'Subscribe' => 'Подписаться',
+  ];
+
+  foreach ($string_to_translate as $source => $translate) {
+    _add_translation($source, $translate, 'ru');
+  }
+}
+
+function _add_translation($source, $translate, $langcode)
+{
+  // Find existing source string.
+  /** @var StringDatabaseStorage $storage */
+  $storage = Drupal::service('locale.storage');
+  $string = $storage->findString(['source' => $source]);
+  if (is_null($string)) {
+    $string = new SourceString();
+    $string->setString($source);
+    $string->setStorage($storage);
+    $string->save();
+  }
+  // Create translation. If one already exists, it will be replaced.
+  $translation = $storage->createTranslation([
+    'lid' => $string->lid,
+    'language' => $langcode,
+    'translation' => $translate,
+    'customized' => 1,
+  ])->save();
+
+}
