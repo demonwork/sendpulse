@@ -3,6 +3,7 @@
 
 namespace Drupal\sendpulse\Form;
 
+use Drupal;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -67,6 +68,12 @@ class ConfigForm extends ConfigFormBase
 
     if (!empty($api_id) && !empty($api_secret)) {
       $options = $this->getAddressBookList($api_id, $api_secret);
+      if ($options == null) {
+        $form['exception'] = [
+          '#markup' => t('Something go wrong, please contact with admin.'),
+        ];
+      }
+
       $form['sendpulse_address_book'] = [
         '#type' => 'select',
         '#options' => $options,
@@ -86,12 +93,17 @@ class ConfigForm extends ConfigFormBase
     try {
       $sp_client = new ApiClient($api_id, $api_secret, new SendpulseTokenStorage('sendpulse.adminsettings'));
       $books = $sp_client->listAddressBooks();
-      // TODO: проверить $books сообщить админу о неполадках
-      foreach ($books as $book) {
-        $address_books[$book->id] = $book->name;
+      if (is_object($books)) {
+        Drupal::logger('sendpulse')->error('No one address book exists.');
+        return null;
+      } else {
+        foreach ($books as $book) {
+          $address_books[$book->id] = $book->name;
+        }
       }
     } catch (Exception $exception) {
-      // TODO: сообщить админу о неполадках
+      Drupal::logger('sendpulse')->error($exception->getMessage());
+      return null;
     }
 
     return $address_books;

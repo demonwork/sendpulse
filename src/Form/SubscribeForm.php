@@ -129,10 +129,19 @@ class SubscribeForm extends FormBase
       }
 
       $r = $sp_client->addEmails($address_book, $data, $add_params);
-      // TODO: проверить $r сообщить пользователю/админу о неполадках
+      if ($r->is_error) {
+        $form['exception'] = [
+          '#markup' => t('Something go wrong, please contact with admin.'),
+        ];
+        Drupal::logger('sendpulse')->error($r->message);
+        return;
+      }
     } catch (Exception $exception) {
-      // TODO: сообщить админу о неполадках
-
+      $form['exception'] = [
+        '#markup' => t('Something go wrong, please contact with admin.'),
+      ];
+      Drupal::logger('sendpulse')->error($exception->getMessage());
+      return;
     }
 
 //    $messenger = Drupal::messenger();
