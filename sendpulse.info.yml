@@ -1,7 +1,8 @@
 name: Sendpulse
 type: module
-description: 'Sendpulse API integration'
+description: 'Sendpulse API integration. Module required php-curl extension, composer pakages "sendpulse/rest-api" and "symfony/property-access"'
 dependencies:
 package: Mail
 core: 8.x
 core_version_requirement: ^8 || ^9
+configure: sendpulse.sendpulse_config_form

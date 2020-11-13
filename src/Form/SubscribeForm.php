@@ -32,7 +32,7 @@ class SubscribeForm extends FormBase
       '#type' => 'email',
       '#title' => $this->t('Email'),
       '#description' => $this->t('Enter your email to subscribe our news.'),
-      '#required' => TRUE,
+      '#required' => false,
       '#prefix' => '<strong>',
       '#suffix' => '</strong>',
     ];
@@ -41,7 +41,7 @@ class SubscribeForm extends FormBase
       '#type' => 'checkbox',
       '#title' => $this->t('Confirm process privacy data'),
       '#description' => $this->t('I agree process my private data. <a href="https://www.ya.ru">Terms</a>'),
-      '#required' => TRUE,
+      '#required' => false,
       '#prefix' => '<strong>',
       '#suffix' => '</strong>',
     ];
@@ -60,6 +60,7 @@ class SubscribeForm extends FormBase
     ];
 
     $form['#cache']['max-age'] = 0;
+    $form['#attributes']['novalidate'] = 'novalidate';
 
     return $form;
   }
