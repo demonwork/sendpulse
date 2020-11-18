@@ -83,6 +83,15 @@ class ConfigForm extends ConfigFormBase
       ];
     }
 
+    $terms_link = $config->get('sendpulse_terms_link');
+    $form['sendpulse_terms_link'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Terms link'),
+      '#description' => $this->t('Terms link'),
+      '#default_value' => !empty($terms_link) ? $terms_link : t('I agree process my private data.') . '<a href="https://www.ya.ru">' . t('Terms') . '</a>',
+    ];
+
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -122,6 +131,7 @@ class ConfigForm extends ConfigFormBase
     $config->set('sendpulse_force_confirm', $form_state->getValue('sendpulse_force_confirm'));
     $config->set('sendpulse_confirm_email', $form_state->getValue('sendpulse_confirm_email'));
     $config->set('sendpulse_address_book', $form_state->getValue('sendpulse_address_book'));
+    $config->set('sendpulse_terms_link', $form_state->getValue('sendpulse_terms_link'));
     $config->save();
   }
 

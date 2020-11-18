@@ -20,6 +20,8 @@ class SubscribeForm extends FormBase
 
   public function buildForm(array $form, FormStateInterface $form_state)
   {
+    $config = $this->config('sendpulse.adminsettings');
+
     $form['#prefix'] = '<div id="sendpulse-subscribe-form-wrapper">';
     $form['#suffix'] = '</div>';
 
@@ -37,10 +39,11 @@ class SubscribeForm extends FormBase
       '#suffix' => '</strong>',
     ];
 
+    $terms_link = $config->get('sendpulse_terms_link');
     $form['confirm'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Confirm process privacy data'),
-      '#description' => $this->t('I agree process my private data. <a href="https://www.ya.ru">Terms</a>'),
+      '#description' => !empty($terms_link) ? $terms_link : t('I agree process my private data.') . '<a href="https://www.ya.ru">' . t('Terms') . '</a>',
       '#required' => false,
       '#prefix' => '<strong>',
       '#suffix' => '</strong>',
