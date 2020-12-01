@@ -12,6 +12,6 @@ sendpulse.sendpulse_config_form:
     _form: '\Drupal\sendpulse\Form\ConfigForm'
     _title: 'Config'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
